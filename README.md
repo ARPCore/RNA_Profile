@@ -1,43 +1,130 @@
 # RNA_Profile
 RNAseq and RPFseq based DE/TE analysis
 
-# RNA-seq Differential expression analysis (DE) and Translation Efficiency Analysis (TE)
+# RNA-seq Differential Expression analysis (DE) and Translation Efficiency Analysis (TE) Pipeline
 
-This repository contains the R scripts used for differential expression
-(DE), translation efficiency (TE), pathway analysis, and visualization
-associated with this study.
+## Overview
 
-## Analysis
+This repository contains R scripts used for differential expression (DE), translation efficiency (TE), gene set enrichment analysis (GSEA), and data visualization in bulk RNA-seq and ribosome profiling studies.
 
-The repository includes:
+The pipeline utilizes widely adopted bioinformatics tools and statistical methods, including:
 
-1. RNA-seq differential expression analysis
-2. Translation efficiency analysis using RNA-seq and Ribo-seq data
-3. PCA and other quality-control visualizations
-4. Heatmap and volcano plot generation
-5. Functional and pathway analysis
-6. Export of analysis results
+* DESeq2
+* RibosomeProfiling
+* clusterProfiler
+* fgsea
+* EnhancedVolcano
+* ggplot2
 
-## Repository structure
+## Repository Structure
 
-- `scripts/` — analysis and visualization scripts
-- `config/` — sample metadata required for the analysis
-- `input/` — description of required input data
-- `results/` — selected analysis results and figures
-- `docs/` — additional methodological notes
+```text
+RNAseq-DE-TE-Pipeline/
+│
+├── README.md
+├── LICENSE
+├── CITATION.cff
+│
+├── config/
+│   └── sample_metadata_example.tsv
+│
+├── scripts/
+│   ├── 01_DESeq2_DE.R
+│   ├── 02_TE_analysis.R
+│   ├── 03_GSEA.R
+│   ├── 04_visualization.R
+│   └── 05_export_results.R
+│
+├── input/
+│   └── README.md
+│
+├── results/
+│   └── README.md
+│
+└── docs/
+    └── workflow.png
+```
 
-## Data availability
+## Requirements
 
-Raw sequencing data and large intermediate files are not included
-in this repository. Data availability is described in the associated
-publication.
+### R
 
-## Reproducibility
+Tested with:
 
-The R package environment used for the analysis is recorded in
-`renv.lock`.
+```r
+R >= 4.3
+```
 
-## Software
+### Packages
 
-The analysis uses standard R/Bioconductor packages. Package versions
-are recorded in `renv.lock`.
+```r
+DESeq2
+ggplot2
+EnhancedVolcano
+clusterProfiler
+fgsea
+dplyr
+tidyr
+readr
+```
+
+## Input Files
+
+The pipeline expects:
+
+1. Gene count matrix
+2. Sample metadata table
+3. Optional TE input files derived from RNA-seq and Ribo-seq quantification
+
+Example:
+
+```text
+input/
+├── counts_matrix.csv
+└── sample_metadata.tsv
+```
+
+## Workflow
+
+### Step 1: Differential Expression
+
+```r
+source("scripts/01_DESeq2_DE.R")
+```
+
+### Step 2: Translation Efficiency Analysis
+
+```r
+source("scripts/02_TE_analysis.R")
+```
+
+### Step 3: Functional Enrichment
+
+```r
+source("scripts/03_GSEA.R")
+```
+
+### Step 4: Visualization
+
+```r
+source("scripts/04_visualization.R")
+```
+
+### Step 5: Export Results
+
+```r
+source("scripts/05_export_results.R")
+```
+
+## Notes
+
+This repository contains analysis and visualization scripts only.
+
+Raw sequencing data, reference genomes, alignments, and large intermediate files are intentionally excluded.
+
+Pre-processing steps performed using standard community software (e.g., FASTX, STAR, featureCounts, RSEM) should be described in the associated manuscript Methods section.
+
+## Citation
+
+If you use this repository, please cite the associated publication.
+
