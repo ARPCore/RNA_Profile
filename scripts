@@ -1,1 +1,238 @@
+### Rscript --vanilla pipeLine_DESeq2_SingleVariableInput.R -c Control -t Treatment
+
+setwd("./")
+library("optparse")
+ 
+option_list = list(
+    make_option(c("-c", "--control"), type="character", default=NULL,
+          help="control condition", metavar="character"),
+    make_option(c("-t", "--treatment"), type="character", default=NULL,
+          help="treatment condition", metavar="character")
+);
+
+
+opt_parser = OptionParser(option_list=option_list);
+
+opt = parse_args(opt_parser);
+
+if (is.null(opt$control)){
+  print_help(opt_parser)
+  stop("At least one argument must be supplied (input file).n", call.=FALSE)
+}
+
+
+
+library(DESeq2)
+library("RColorBrewer")
+library("gplots")
+library("NMF")
+library(ggrepel)
+library("NMF")
+library(EnhancedVolcano)
+
+setwd("./")
+
+
+
+count_table_RNA <- read.table("summary_gene_count_table.txt",head=T,check.names=F)
+
+count_table_sample_all <- read.table("count_tab_sample_RNA.txt",head =T,sep="\t",check.names=F)
+
+############# Step1 analysis RNA seq
+count_table <- count_table_RNA
+rownames(count_table) <- count_table$GeneID
+count_table <- count_table[-1]
+count_table_sample <- count_table_sample_all
+row.names(count_table_sample)<-count_table_sample$sample
+colnames(count_table) <- row.names(count_table_sample)
+head(count_table)
+
+
+ctrl <- as.name(opt$control)
+
+treat <- as.name(opt$treatment)
+
+dir.create(file.path(paste(treat,"_vs_",ctrl,sep="")))
+folder <- paste(treat,"_vs_",ctrl,sep="")
+
+count_table_sample_2c <- count_table_sample[count_table_sample$condition %in% c(ctrl,treat),]
+
+count_table_2c <- count_table[,rownames(count_table_sample_2c)]
+
+dds <- DESeqDataSetFromMatrix(countData=count_table_2c, colData=count_table_sample_2c, design = ~condition)
+dim(dds)
+
+dds <- dds[ rowMeans(counts(dds)) > 10, ]
+dim(dds)
+
+dds <- estimateSizeFactors(dds)
+
+dds <- DESeq(dds)
+
+####### PCA plot
+vst <- varianceStabilizingTransformation(dds,blind=FALSE)
+#assay(rld)
+hmcol <- colorRampPalette(brewer.pal(9,"GnBu"))(100)
+pdf(paste(folder,"/Plot_basedOnVST_RNA","_",treat,"_vs_",ctrl,".pdf",sep=""))
+par(mar=c(5.1,4.1,4.1,4.1))
+sampleDists <- as.matrix(dist(t(assay(vst))))
+heatmap.2(as.matrix(sampleDists),col=hmcol,Rowv=T,Colv=T,scale="none",
+trace="none",margin=c(15,15))
+plotPCA(vst, intgroup=c("cellLine"),ntop=Inf)
+plotPCA(vst, intgroup=c("Sname"),ntop=Inf)
+garbage <- dev.off()
+
+## add label to the dot plots
+pcaData <- plotPCA(vst, intgroup="condition", returnData=TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+pdf(paste(folder,"/LabeledPlot_basedOnVST_RNA","_",treat,"_vs_",ctrl,".pdf",sep=""))
+par(mar=c(5.1,4.1,4.1,4.1))
+ggplot(pcaData, aes(PC1, PC2, color=condition, label=name)) +
+  geom_point(size=3) +
+  geom_text_repel() +
+  theme_minimal()
+garbage <- dev.off()
+
+
+#############################################################################
+###########################################################################
+### res DE
+
+res <- results(dds,contrast=c("condition",toString(treat),toString(ctrl)),independentFilter=FALSE)
+res <- na.omit(res) ## remove NA in pvalue or adjpvalue
+
+### use enhancedVlocano Package in R
+################## customized
+# create custom key-value pairs for 'pj>=.05', 'pf<.05$|log2FC|<=2', 'pf<.05$log2FC>2' pf<.05$log2FC<-2
+  # this can be achieved with nested ifelse statements
+############################################################################################################
+################## Based on adjp-Value
+C1 <- res[res$padj>=0.05,]
+C2 <- res[(res$padj<0.05 & abs(res$log2FoldChange)<=log2(1.5)),]
+C3 <- res[(res$padj<0.05 & res$log2FoldChange>log2(1.5)),]
+C4 <- res[(res$padj<0.05 & res$log2FoldChange< -log2(1.5)),]
+
+write.table(C3,file=paste(folder,"/diffgene_",treat,"_vs_",ctrl,"_RNA_Upregulate_padj.txt",sep=""),row.names = T, sep="\t",quote=F)
+write.table(C4,file=paste(folder,"/diffgene_",treat,"_vs_",ctrl,"_RNA_Downregulate_padj.txt",sep=""),row.names = T, sep="\t",quote=F)
+
+####### include all
+pdf(paste(folder,"/Diff_VolcanoPlot_",treat,"_vs_",ctrl,"_RNA_basedOnAdjustedPValue_FC_1ndHalf_labeled.pdf",sep=""))
+par(mar=c(5.1,4.1,8.1,4.1))
+EnhancedVolcano(res,
+    lab = rownames(res),
+    x = "log2FoldChange",
+    y = "padj",
+    xlab = bquote(~Log[2]~ "fold change"),
+    ylab = bquote(~-Log[10]~adjusted~italic(P)),
+    axisLabSize = 12,
+    title = paste("VolcanoPlot_",treat,"_vs_",ctrl,"_RNA",sep=""),
+    subtitle = "",
+    pCutoff = 0.05,
+    FCcutoff = log2(1.5),
+    pointSize = 1,#
+    labSize = 2.0,#3
+    colAlpha = 1,
+    legendPosition = "bottom",
+    legendLabSize = 5,
+    legendIconSize = 3,
+    border = "full",
+    borderWidth = 1,
+    borderColour = "black",
+    gridlines.major = FALSE,
+    gridlines.minor = FALSE,
+    )
+garbage <- dev.off()
+
+pdf(paste(folder,"/Diff_VolcanoPlot_",treat,"_vs_",ctrl,"_RNA_basedOnAdjustedPValue_FC_1ndHalf.pdf",sep=""))
+par(mar=c(5.1,4.1,8.1,4.1))
+EnhancedVolcano(res,
+    lab = NA,
+    x = "log2FoldChange",
+    y = "padj",
+    xlab = bquote(~Log[2]~ "fold change"),
+    ylab = bquote(~-Log[10]~adjusted~italic(P)),
+    axisLabSize = 12,
+    title = paste("VolcanoPlot_",treat,"_vs_",ctrl,"_RNA",sep=""),
+    subtitle = "",
+    pCutoff = 0.05,
+    FCcutoff = log2(1.5),
+    pointSize = 1,#
+    colAlpha = 1,
+    legendPosition = "bottom",
+    legendLabSize = 5,## 10
+    legendIconSize = 3, ## 3
+    border = "full",
+    borderWidth = 1,
+    borderColour = "black",
+    gridlines.major = FALSE,
+    gridlines.minor = FALSE,
+    )
+garbage <- dev.off()
+
+############################################################################################################
+################## Based on p-Value
+C1 <- res[res$pvalue>=0.05,]
+C2 <- res[(res$pvalue<0.05 & abs(res$log2FoldChange)<=log2(1.5)),]
+C3 <- res[(res$pvalue<0.05 & res$log2FoldChange>log2(1.5)),]
+C4 <- res[(res$pvalue<0.05 & res$log2FoldChange< -log2(1.5)),]
+
+
+write.table(C3,file=paste(folder,"/diffgene_",treat,"_vs_",ctrl,"_RNA_Upregulate_pValue.txt",sep=""),row.names = T, sep="\t",quote=F)
+write.table(C4,file=paste(folder,"/diffgene_",treat,"_vs_",ctrl,"_RNA_Downregulate_pValue.txt",sep=""),row.names = T, sep="\t",quote=F)
+
+
+####### include all
+pdf(paste(folder,"/Diff_VolcanoPlot_",treat,"_vs_",ctrl,"_RNA_basedOnPValue_FC_1ndHalf_labeled.pdf",sep=""))
+par(mar=c(5.1,4.1,8.1,4.1))
+EnhancedVolcano(res,
+    lab = rownames(res),
+    x = "log2FoldChange",
+    y = "pvalue",
+    xlab = bquote(~Log[2]~ "fold change"),
+    ylab = bquote(~-Log[10]~italic(P-value)),
+    axisLabSize = 12,
+    title = paste("VolcanoPlot_",treat,"_vs_",ctrl,"_RNA",sep=""),
+    subtitle = "",
+    pCutoff = 0.05,
+    FCcutoff = log2(1.5),
+    pointSize = 1,#
+    labSize = 2.0,#3
+    colAlpha = 1,
+    legendPosition = "bottom",
+    legendLabSize = 4.5,## 10
+    legendIconSize = 3, ## 3
+    border = "full",
+    borderWidth = 1,
+    borderColour = "black",
+    gridlines.major = FALSE,
+    gridlines.minor = FALSE,
+    )
+garbage <- dev.off()
+
+pdf(paste(folder,"/Diff_VolcanoPlot_",treat,"_vs_",ctrl,"_RNA_basedOnPValue_FC_1ndHalf.pdf",sep=""))
+par(mar=c(5.1,4.1,8.1,4.1))
+EnhancedVolcano(res,
+    lab = NA,
+    x = "log2FoldChange",
+    y = "pvalue",
+    xlab = bquote(~Log[2]~ "fold change"),
+    ylab = bquote(~-Log[10]~italic(P-value)),
+    axisLabSize = 12,
+    title = paste("VolcanoPlot_",treat,"_vs_",ctrl,"_RNA",sep=""),
+    subtitle = "",
+    pCutoff = 0.05,
+    FCcutoff = log2(1.5),
+    pointSize = 1,#
+    labSize = 2.0,
+    colAlpha = 1,
+    legendPosition = "bottom",
+    legendLabSize = 4.5,
+    legendIconSize = 3,
+    border = "full",
+    borderWidth = 1,
+    borderColour = "black",
+    gridlines.major = FALSE,
+    gridlines.minor = FALSE,
+)
+garbage <- dev.off()
 
