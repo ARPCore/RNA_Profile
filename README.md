@@ -118,6 +118,8 @@ Raw sequencing data, reference genomes, alignments, and large intermediate files
 
 Pre-processing steps performed using standard community software (e.g., FASTX, STAR, featureCounts, RSEM) should be described in the associated manuscript Methods section.
 
+Example visualization: certain code demonstrates the general structure of an RNA-versus-RPF correlation plot, which means that some example code is simplified and does not represent the complete analysis implementation used in the study
+
 ## Citation
 
 If you use this repository, please cite the associated publication.
