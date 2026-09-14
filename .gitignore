@@ -1,59 +1,26 @@
-# R
+# R session files
 
 .Rhistory
 .RData
 .Ruserdata
 .Rproj.user/
 
-# renv cache
+# Local / temporary files
 
-renv/library/
-renv/staging/
+*.tmp
+*.log
 
-# Sequencing files
+# Generated analysis output (condition specific folders)
 
-*.fastq
-*.fastq.gz
-*.fq
-*.fq.gz
+results**/
+GO_**/
+**/
 
-# Alignment files
+# Figures generated locally
 
-*.bam
-*.sam
-*.bai
-
-# Quantification outputs
-
-*.ctab
-*.genes.results
-*.isoforms.results
-
-# Large files
-
-*.tar
-*.tar.gz
-*.zip
-
-# Results
-
-results/*
-!results/README.md
-
-# Input data
-
-input/*
-!input/README.md
-
-# Figures
-
-*.png
-*.jpg
-*.jpeg
 *.pdf
 
-# Temporary
+# OS files
 
-tmp/
-temp/
-
+.DS_Store
+Thumbs.db
