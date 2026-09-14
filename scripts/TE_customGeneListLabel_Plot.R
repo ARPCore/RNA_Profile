@@ -1,5 +1,7 @@
 
 ### Rscript --vanilla TE_customGeneListPlot.R -c Control -t Treatment
+#### Note: need to be modified using variable label same as input to specify custom condition names in above command line
+
 
 library("RColorBrewer")
 library("ggplot2")
