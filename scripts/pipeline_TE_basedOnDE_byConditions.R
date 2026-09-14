@@ -1,5 +1,6 @@
 
 ### Rscript --vanilla pipeline_TE_byConditions.R -c Control -t Treatment
+# note: certain features which were specifically used in the study were removed
 
 library("RColorBrewer")
 library("ggplot2")
