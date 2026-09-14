@@ -23,26 +23,20 @@ RNAseq-DE-TE-Pipeline/
 │
 ├── README.md
 ├── LICENSE
-├── CITATION.cff
-│
-├── config/
-│   └── sample_metadata_example.tsv
 │
 ├── scripts/
-│   ├── 01_DESeq2_DE.R
-│   ├── 02_TE_analysis.R
-│   ├── 03_GSEA.R
-│   ├── 04_visualization.R
-│   └── 05_export_results.R
+│   ├── 01_pipeLine_DESeq2_SingleVariableInput.R
+│   ├── 02_pipeline_TE_basedOnDE_byCondtions.R
+│   ├── 03_TE_customGeneListLabel_Plot.R
+│   ├── 04_pipeline_TE_basedOnDE_byCondtions.R
+│   └── 05_gsea.R
 │
-├── input/
-│   └── README.md
-│
-├── results/
-│   └── README.md
+├── Input/
+│   └── count_tables.txt
+│   └── sample_metadata_example.txt
 │
 └── docs/
-    └── workflow.png
+    └── Main algorithms; Reference 
 ```
 
 ## Requirements
@@ -76,12 +70,12 @@ The pipeline expects:
 2. Sample metadata table
 3. Optional TE input files derived from RNA-seq and Ribo-seq quantification
 
-Example:
+Example (please check the specific RNA and RPF related tables in input folder):
 
 ```text
 input/
-├── counts_matrix.csv
-└── sample_metadata.tsv
+├── counts_matrix.txt
+└── sample_metadata.txt
 ```
 
 ## Workflow
