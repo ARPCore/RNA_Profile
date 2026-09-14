@@ -9,7 +9,7 @@ where:
 condition = Control or Treatment
 seqType = RNA or RPF
 
-
+'''text
 The interaction term represents TE changes:
 "conditionTreat.seqTypeRPF"
 
@@ -25,3 +25,4 @@ $$ \log_2\left( \frac{RPF_{Treat}/RNA_{Treat}} {RPF_{Ctrl}/RNA_{Ctrl}} \right) $
 Therefore:
 
 $$ \boxed{ \log_2FC_{interaction} = \log_2(TreatTE/CtrlTE) } $$
+'''
