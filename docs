@@ -1,1 +1,27 @@
+Differential expression analysis was performed using DESeq2
+(v1.44.0).
 
+Translation efficiency was estimated using an interaction model:
+
+~ condition + seqType + condition:seqType
+
+where:
+condition = Control or Treatment
+seqType = RNA or RPF
+
+
+The interaction term represents TE changes:
+"conditionTreat.seqTypeRPF"
+
+Algorithem:
+The interaction coefficient is:
+
+$$ [\log_2(RPF/RNA)_{Treat}] - [\log_2(RPF/RNA)_{Ctrl}] $$
+
+which is:
+
+$$ \log_2\left( \frac{RPF_{Treat}/RNA_{Treat}} {RPF_{Ctrl}/RNA_{Ctrl}} \right) $$
+
+Therefore:
+
+$$ \boxed{ \log_2FC_{interaction} = \log_2(TreatTE/CtrlTE) } $$
