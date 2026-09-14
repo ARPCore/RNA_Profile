@@ -25,3 +25,6 @@ Therefore:
 
 *** log2FC_interaction = log2(Treat_TE/Ctrl_TE) ***
 
+Note: the DESeq2 calculation for interaction coefficient is not exactly the value of log2(Treat_TE) - log2(Ctrl_TE)
+Reason: it is the GLM-estimated TE fold change, not necessarily the exact arithmetic value obtained from directly calculating TE ratios from group means;
+        While for genes with decent counts and stable replicates, the two are often extremely close
