@@ -1,6 +1,6 @@
-
 ### Rscript --vanilla pipeline_TE_byConditions.R -c Control -t Treatment
 # note: certain features which were specifically used in the study were removed
+
 
 library("RColorBrewer")
 library("ggplot2")
@@ -154,8 +154,6 @@ EnhancedVolcano(res,
     #xlim = c(-15,15),
     labSize = 2.0,#3
     colAlpha = 1,
-    #legend=c("NS","Log2 FC","Adjusted p-value",
-    #        "Adjusted p-value & Log2 FC"),
     legendPosition = "bottom",
     legendLabSize = 4.5,## 10, or 6
     legendIconSize = 3, ## 3
@@ -304,9 +302,8 @@ dim(tt)
 ############################################
 write.table(tt ,file=paste(Treatment_folder,"/",Treatment,"_RPFvsRNA_geneLevel_ddsNormalization.txt",sep=""),row.names=T,sep="\t", quote=F)
 
-######## Generate Volcano plot for Fbxo4null_Ctrl vs Ctrl_Ctrl RNA
+######## Generate Volcano plot
 res <- results(dds,contrast=c("seqType","RPF","RNA"),independentFilter=FALSE)
-# Add independentFilter=FALSE not to filter out the outliers so that padj won't be NA
 resOrdered <- res[order(res$log2FoldChange),]
 
 write.table(resOrdered ,file=paste(Treatment_folder,"/diffGene_",Treatment,"_RPFvsRNA_all.txt",sep=""),row.names = T, sep="\t",quote=F)
@@ -315,43 +312,7 @@ diff_table_Treatment <- resOrdered
 
 ################## customized
 res <- na.omit(res) ## remove NA in pvalue or adjpvalue
-
-C1 <- res[res$padj>=0.05,]
-C2 <- res[(res$padj<0.05 & abs(res$log2FoldChange)<=log2(1.5)),]
-C3 <- res[(res$padj<0.05 & res$log2FoldChange>log2(1.5)),]
-C4 <- res[(res$padj<0.05 & res$log2FoldChange< -log2(1.5)),]
-
-write.table(C3,file=paste(Treatment_folder,"/diffGene_",Treatment,"_RPFvsRNA_UpregulateGenes_ByAdjP.txt",sep=""),row.names = T, sep="\t",quote=F)
-write.table(C4,file=paste(Treatment_folder,"/diffGene_",Treatment,"_RPFvsRNA_DownregulateGenes_ByAdjP.txt",sep=""),row.names = T, sep="\t",quote=F)
-
 ####### include all
-pdf(paste(Treatment_folder,"/TE_VolcanoPlot_",Treatment,"_RPFvsRNA_GeneLevel_basedOnAdjustedPValue_FC_1ndHalf_labeled.pdf",sep=""))
-par(mar=c(5.1,4.1,8.1,4.1))
-EnhancedVolcano(res,
-    lab = rownames(res),
-    x = "log2FoldChange",
-    y = "padj",
-    xlab = bquote(~Log[2]~ "TE"),
-    ylab = bquote(~-Log[10]~adjusted~italic(P)),
-    axisLabSize = 12,
-    title = paste("VolcanoPlot_",Treatment,"_gene_RPFvsRNA",sep=""),
-    subtitle = "",
-    pCutoff = 0.05,
-    FCcutoff = log2(1.5),
-    pointSize = 1,#
-    labSize = 2.0,#3
-    colAlpha = 1,
-    legendPosition = "bottom",
-    legendLabSize = 4.5,## 10, or 6
-    legendIconSize = 3, ## 3
-    border = "full",
-    borderWidth = 1,
-    borderColour = "black",
-    gridlines.major = FALSE,
-    gridlines.minor = FALSE,
-    
-)
-garbage <- dev.off()
 
 pdf(paste(Treatment_folder,"/TE_VolcanoPlot_",Treatment,"_RPFvsRNA_GeneLevel_basedOnAdjustedPValue_FC_1ndHalf.pdf",sep=""))
 par(mar=c(5.1,4.1,8.1,4.1))
@@ -385,42 +346,6 @@ garbage <- dev.off()
 
 ##################
 ################## Based on p-Value
-C1 <- res[res$pvalue>=0.05,]
-C2 <- res[(res$pvalue<0.05 & abs(res$log2FoldChange)<=log2(1.5)),]
-C3 <- res[(res$pvalue<0.05 & res$log2FoldChange>log2(1.5)),]
-C4 <- res[(res$pvalue<0.05 & res$log2FoldChange< -log2(1.5)),]
-
-write.table(C3,file=paste(Treatment_folder,"/diffgene_",Treatment,"_RPFvsRNA_UpregulateGenes_byPvalue.txt",sep=""),row.names = T, sep="\t",quote=F)
-write.table(C4,file=paste(Treatment_folder,"/diffgene_",Treatment,"_RPFvsRNA_DownregulateGenes_byPvalue.txt",sep=""),row.names = T, sep="\t",quote=F)
-
-####### include all
-pdf(paste(Treatment_folder,"/TE_VolcanoPlot_",Treatment,"_RPFvsRNA_GeneLevel_basedOnPValue_FC_1ndHalf_labeled.pdf",sep=""))
-par(mar=c(5.1,4.1,8.1,4.1))
-EnhancedVolcano(res,
-    lab = rownames(res),
-    x = "log2FoldChange",
-    y = "pvalue",
-    xlab = bquote(~Log[2]~ "TE"),
-    ylab = bquote(~-Log[10]~italic(P-value)),
-    axisLabSize = 12,
-    title = paste("VolcanoPlot_",Treatment,"_gene_RPFvsRNA",sep=""),
-    subtitle = "",
-    pCutoff = 0.05,
-    FCcutoff = log2(1.5),
-    pointSize = 1,#
-    labSize = 2.0,#3
-    colAlpha = 1,
-    legendPosition = "bottom",
-    legendLabSize = 4.5,## 10
-    legendIconSize = 3, ## 3
-    border = "full",
-    borderWidth = 1,
-    borderColour = "black",
-    gridlines.major = FALSE,
-    gridlines.minor = FALSE,
-    
-)
-garbage <- dev.off()
 
 pdf(paste(Treatment_folder,"/TE_VolcanoPlot_",Treatment,"_RPFvsRNA_GeneLevel_basedOnPValue_FC_1ndHalf.pdf",sep=""))
 par(mar=c(5.1,4.1,8.1,4.1))
@@ -489,7 +414,18 @@ correlationFigureByColor <- function(count_table) {
 }
 
 
-CorrO_FC <- correlationFigureByColor(neCtrl)
+ID <- intersect(rownames(diff_table_ctrl),rownames(diff_table_treat))
+table<- merge(as.data.frame(diff_table_ctrl[ID,c(2,6)]), as.data.frame(diff_table_treat[ID,c(2,6)]), by = "row.names", all = TRUE)
+rownames(table) <- table$Row.names
+table[is.na(table)] <- 0
+newT <- table[ID,c(2:5)]
+newName <- c(paste("log2FC_",ctrl,"_RPFvsRNA",sep=""), paste(ctrl,"_padj",sep=""),paste("log2FC_",treat,"_RPFvsRNA",sep=""), paste(treat,"_padj",sep=""))
+colnames(newT) <- newName
+
+write.table(newT ,file=paste(folder_te,"/", treat, "_vs_", ctrl, "_TE_Calculation_table_RPFvsRNA.txt",sep=""),row.names=T,sep="\t", quote=F)
+
+
+CorrO_FC <- correlationFigureByColor(newT)
 pdf(paste(folder_te,"/Delta_",Treatment," vs Delta_", Ctrl, " (", Treatment, "_TEvs",Ctrl,"_TE).pdf",sep=""))
 par(mar=c(5.1,4.1,4.1,4.1))
 CorrO_FC
@@ -499,30 +435,22 @@ garbage <- dev.off()
 ########################################################################################*****************************
 ## TE correlatiopn analysis based on the TE of sample based conditions
 ##########################################################################################################################
-###########
 
 T_table <- cbind(table_Ctrl, table_Treatment)
-
 sample_info <- rbind(meta_Ctrl, meta_Treatment)
 
 ## Relevel before DESeq()
 sample_info$condition <- relevel(factor(sample_info$condition), ref = "Control")
 dds <- DESeqDataSetFromMatrix(countData = T_table, colData   = sample_info, design    = ~ condition + seqType + condition:seqType)
 dds <- DESeq(dds)
-resultsNames(dds) # The last one (interaction term) is the one you want
-res <- results(dds, name="conditionTreatment.seqTypeRPF")  # Extract the interaction result
+resultsNames(dds)
+res <- results(dds, name="conditionTreatment.seqTypeRPF")
 resOrdered <- res[order(res$log2FoldChange),]
 write.table(resOrdered, file=paste(folder_te,"/", Treatment, "_vs_", Ctrl, "_TEs_Interaction_table.txt",sep=""),row.names = T, sep="\t",quote=F)
 
-############################################## visualization ########################
 # Optional: shrink LFCs for visualization
 resLFC <- lfcShrink(dds, coef="conditionTreatment.seqTypeRPF", type="ashr")  # needs ashr package
 
-
+### Important:
 saveRDS(list(dds = dds,res = res,resOrdered = resOrdered, resLFC = resLFC), file = paste0(folder_te, "/TE_analysis_full.rds"))
-### Important
 ## provide the TE analysis Object for downstream TEs comparison analysis
-
-
-
-
