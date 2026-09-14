@@ -102,17 +102,6 @@ plotPCA(vst, intgroup=c("cellLine"),ntop=Inf)
 plotPCA(vst, intgroup=c("Sname"),ntop=Inf)
 garbage <- dev.off()
 
-## add label to the dot plots
-pcaData <- plotPCA(vst, intgroup="condition", returnData=TRUE)
-percentVar <- round(100 * attr(pcaData, "percentVar"))
-pdf(paste(folder,"/LabeledPlot_basedOnVST_RNA","_",treat,"_vs_",ctrl,".pdf",sep=""))
-par(mar=c(5.1,4.1,4.1,4.1))
-ggplot(pcaData, aes(PC1, PC2, color=condition, label=name)) +
-  geom_point(size=3) +
-  geom_text_repel() +
-  theme_minimal()
-garbage <- dev.off()
-
 
 #############################################################################
 ###########################################################################
@@ -125,8 +114,6 @@ write.table(as.data.frame(res),file=paste0(folder,"/DESeq2_all_results.txt"),sep
 
 ### use enhancedVlocano Package in R
 ################## customized
-# create custom key-value pairs for 'pj>=.05', 'pf<.05$|log2FC|<=2', 'pf<.05$log2FC>2' pf<.05$log2FC<-2
-  # this can be achieved with nested ifelse statements
 ############################################################################################################
 ################## Based on adjp-Value
 C1 <- res[res$padj>=0.05,]
