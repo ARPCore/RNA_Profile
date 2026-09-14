@@ -83,31 +83,31 @@ input/
 ### Step 1: Differential Expression
 
 ```r
-source("scripts/01_DESeq2_DE.R")
+source("scripts/pipeLine_DESeq2_SingleVariableInput.R")
 ```
 
 ### Step 2: Translation Efficiency Analysis
 
 ```r
-source("scripts/02_TE_analysis.R")
+source("scripts/pipeline_TE_basedOnDE_byCondtions.R")
 ```
 
-### Step 3: Functional Enrichment
+### Step 3: TE Interactive Coefficient Analysis
 
 ```r
-source("scripts/03_GSEA.R")
+source("scripts/TE_customGeneListLabel_Plot.R")
 ```
 
-### Step 4: Visualization
+### Step 4: DEs Interaction Analysis
 
 ```r
 source("scripts/04_visualization.R")
 ```
 
-### Step 5: Export Results
+### Step 5: Functional Enrichment
 
 ```r
-source("scripts/05_export_results.R")
+source("scripts/gsea.R")
 ```
 
 ## Notes
