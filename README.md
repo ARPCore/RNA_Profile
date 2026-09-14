@@ -28,7 +28,7 @@ RNAseq-DE-TE-Pipeline/
 │   ├── 01_pipeLine_DESeq2_SingleVariableInput.R
 │   ├── 02_pipeline_TE_basedOnDE_byCondtions.R
 │   ├── 03_TE_customGeneListLabel_Plot.R
-│   ├── 04_pipeline_TE_basedOnDE_byCondtions.R
+│   ├── 04_DEs_Interaction.R
 │   └── 05_gsea.R
 │
 ├── Input/
@@ -101,7 +101,7 @@ source("scripts/TE_customGeneListLabel_Plot.R")
 ### Step 4: DEs Interaction Analysis
 
 ```r
-source("scripts/04_visualization.R")
+source("scripts/DEs_Interaction.R")
 ```
 
 ### Step 5: Functional Enrichment
