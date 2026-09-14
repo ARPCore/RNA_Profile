@@ -1,0 +1,7 @@
+sample	replicate	cellLine	condition	Sname	Scondition	 batch	seqType	sample_name
+rS1	1	Control	Control	Control_R1	Control_R1	1	RPF	Control_R1_RPF
+rS2	2	Control	Control	Control_R2	Control_R2	1	RPF	Control_R2_RPF
+rS3	3	Control	Control	Control_R3	Control_R3	1	RPF	Control_R3_RPF
+rS4	1	Treatment	Treatment	Treatment_R1	Treatment_R1	1	RPF	Treatment_R1_RPF
+rS5	2	Treatment	Treatment	Treatment_R2	Treatment_R2	1	RPF	Treatment_R2_RPF
+rS6	3	Treatment	Treatment	Treatment_R3	Treatment_R3	1	RPF	Treatment_R3_RPF
