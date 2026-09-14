@@ -33,3 +33,22 @@ Therefore:
 Note: the DESeq2 calculation for interaction coefficient is not exactly the value of log2(Treat_TE) - log2(Ctrl_TE)
 Reason: it is the GLM-estimated TE fold change, not necessarily the exact arithmetic value obtained from directly calculating TE ratios from group means;
         While for genes with decent counts and stable replicates, the two are often extremely close
+
+
+##################################################################################################################
+3. Selected Reference examples using in the analysis and ploting:
+
+DESeq2
+Love, M.I., Huber, W., Anders, S. (2014) Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15:550. 10.1186/s13059-014-0550-8
+
+ribosomeProfilingQC
+Ou J, Hoye M (2024). ribosomeProfilingQC: Ribosome Profiling Quality Control. R package version 1.14.1
+
+ReactomePA v1.50.0
+Guangchuang Yu, Qing-Yu He. ReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization. Molecular BioSystems. 2016, 12(2):477-479
+
+fgsea
+Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis. Bioinformatics. 2015, 31(4):608-609
+
+clusterProfiler
+T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X Fu, S Liu, X Bo, and G Yu. clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation. 2021, 2(3):100141
