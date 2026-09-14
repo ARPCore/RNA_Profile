@@ -9,20 +9,19 @@ where:
 condition = Control or Treatment
 seqType = RNA or RPF
 
-'''text
 The interaction term represents TE changes:
 "conditionTreat.seqTypeRPF"
 
 Algorithem:
 The interaction coefficient is:
 
-$$ [\log_2(RPF/RNA)_{Treat}] - [\log_2(RPF/RNA)_{Ctrl}] $$
+*** [log_2(RPF/RNA)_Treat] - [log_2(RPF/RNA)_Ctrl] ***
 
 which is:
 
-$$ \log_2\left( \frac{RPF_{Treat}/RNA_{Treat}} {RPF_{Ctrl}/RNA_{Ctrl}} \right) $$
+*** log_2 (RPF_Treat/RNA_Treat} / RPF_Ctrl/RNA_Ctrl) ***
 
 Therefore:
 
-$$ \boxed{ \log_2FC_{interaction} = \log_2(TreatTE/CtrlTE) } $$
-'''
+*** log2FC_interaction = log2(Treat_TE/Ctrl_TE) ***
+
