@@ -95,6 +95,7 @@ BiocManager::install(c(
     "fgsea"
 ))
 ```
+Install the required packages before running the analysis scripts. Installation time depends on the computer specifications, internet connection, and package dependencies.
 
 ### 3. Load Required Packages
 
@@ -219,7 +220,30 @@ Output files and figures are generated according to the settings specified in th
 
 ### 3. Expected Run Time
 
-The downstream analysis demo typically takes approximately 10 minutes to complete on a standard desktop computer, depending on computer specifications and dataset size.
+The example analysis workflow typically takes approximately 10 minutes to complete, depending on computer specifications and dataset size. This estimate refers to analysis execution time after all required R packages have been installed. Installation time is additional and varies depending on the computing environment and internet connection.
+
+## How to Run the Software on Your Data
+
+1. **Download the repository:** Clone or download this repository to your local computer.
+
+2. **Prepare input files:** Prepare gene-level RNA-seq and ribosome profiling (RPF-seq) count matrices and a sample metadata table. For translation efficiency (TE) analysis, RNA-seq and RPF-seq data should correspond to the appropriate biological samples and experimental conditions.
+
+3. **Configure the scripts:** Open the relevant R scripts and update the input file paths, sample information, experimental conditions, and analysis parameters according to your study design.
+
+4. **Run the analysis:** Execute the R scripts in R or RStudio, following the workflow described above. Individual scripts can be run independently when only specific analyses are required.
+
+5. **Review the results:** The scripts generate differential expression (DE) and translation efficiency (TE) analysis results, gene set enrichment analysis (GSEA) results, and associated visualization outputs, as applicable to the selected analyses.
+
+The example workflow typically takes approximately **10 minutes** to complete, depending on computer specifications and dataset size. Actual execution time may vary with the size and complexity of the input data.
+
+## Scope and Limitations
+
+This repository provides downstream R scripts for RNA-seq and RPF-seq data analysis. It does not include raw sequencing data processing, read alignment, or gene-level count generation.
+
+Users should complete sequencing data preprocessing and quantification separately using appropriate bioinformatics tools (e.g., STAR and featureCounts) before running the analysis scripts provided here.
+
+The scripts are intended to serve as a reproducible analysis framework and may require adjustments to input file paths, sample information, and analysis parameters to accommodate different experimental designs and datasets.
+
 
 ## Notes
 
