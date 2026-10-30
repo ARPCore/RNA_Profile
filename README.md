@@ -62,6 +62,59 @@ tidyr
 readr
 ```
 
+## Installation
+
+### 1. Install R
+
+Install R (version 4.3 or later) from [CRAN](https://cran.r-project.org/).
+
+### 2. Install Required R Packages
+
+Install the required CRAN and Bioconductor packages using the following commands:
+
+```r
+# Install BiocManager
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+# Install CRAN packages
+install.packages(c(
+    "ggplot2",
+    "dplyr",
+    "tidyr",
+    "readr"
+))
+
+# Install Bioconductor packages
+BiocManager::install(c(
+    "DESeq2",
+    "RibosomeProfiling",
+    "EnhancedVolcano",
+    "clusterProfiler",
+    "fgsea"
+))
+```
+
+### 3. Load Required Packages
+
+```r
+library(DESeq2)
+library(ggplot2)
+library(RibosomeProfiling)
+library(EnhancedVolcano)
+library(clusterProfiler)
+library(fgsea)
+library(dplyr)
+library(tidyr)
+library(readr)
+```
+
+### Installation Time
+
+The installation of R and all required packages typically takes approximately 15–30 minutes on a standard desktop computer with a stable internet connection. Installation time may vary depending on computer specifications, operating system, and internet speed.
+
+
 ## Input Files
 
 The pipeline expects:
