@@ -62,6 +62,10 @@ tidyr
 readr
 ```
 
+### Hardware Requirements
+
+No specialized or non-standard hardware is required. The analysis can be performed on a standard desktop or laptop computer capable of running R and the required packages. Execution time may vary depending on computer specifications and dataset size.
+
 ## Installation
 
 ### 1. Install R
