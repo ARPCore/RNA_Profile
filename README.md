@@ -217,7 +217,7 @@ The analysis generates results and visualizations, including:
 
 Output files and figures are generated according to the settings specified in the individual R scripts.
 
-### ### 3. Expected Run Time
+### 3. Expected Run Time
 
 The downstream analysis demo typically takes approximately 10 minutes to complete on a standard desktop computer, depending on computer specifications and dataset size.
 
