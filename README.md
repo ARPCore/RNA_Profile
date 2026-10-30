@@ -163,6 +163,64 @@ source("scripts/DEs_Interaction.R")
 source("scripts/gsea.R")
 ```
 
+## Demo and Reproducibility
+
+### 1. Instructions to Run on Data
+
+This repository provides R scripts for downstream differential expression (DE), translation efficiency (TE), and functional enrichment analyses using preprocessed RNA-seq and ribosome profiling (RPF) data.
+
+**Input data:**
+- Gene-level RNA-seq count matrix.
+- Gene-level RPF count matrix.
+- Sample metadata table containing sample identifiers and experimental conditions.
+- Additional input files or gene lists, when required by individual analyses.
+
+Example input files are provided in the `Input/` directory.
+
+**Running the analysis:**
+
+1. Clone or download the repository.
+2. Install R and the required R packages (see Installation).
+3. Open R or RStudio and set the working directory to the repository root.
+4. Check and adjust the input file paths, sample information, and analysis parameters in the corresponding R scripts.
+5. Run the relevant analysis scripts:
+
+```r
+# 1. Differential expression analysis
+source("scripts/01_pipeLine_DESeq2_SingleVariableInput.R")
+
+# 2. Translation efficiency analysis
+source("scripts/02_pipeline_TE_basedOnDE_byCondtions.R")
+
+# 3. TE visualization with custom gene labels
+source("scripts/03_TE_customGeneListLabel_Plot.R")
+
+# 4. Differential expression interaction analysis
+source("scripts/04_DEs_Interaction.R")
+
+# 5. Gene set enrichment analysis
+source("scripts/05_gsea.R")
+```
+
+The scripts can be used for the corresponding analyses independently, provided that their required input files and parameters are supplied.
+
+### 2. Expected Output
+
+The analysis generates results and visualizations, including:
+
+- Differential expression results from RNA-seq and RPF data.
+- Translational efficiency (TE) analysis results.
+- TE comparison and visualization plots.
+- Differential expression interaction analysis results.
+- Gene set enrichment analysis (GSEA) results and enrichment plots.
+- PCA, hierarchical clustering, heatmaps, and other statistical visualizations, where applicable.
+
+Output files and figures are generated according to the settings specified in the individual R scripts.
+
+### ### 3. Expected Run Time
+
+The downstream analysis demo typically takes approximately 10 minutes to complete on a standard desktop computer, depending on computer specifications and dataset size.
+
 ## Notes
 
 This repository contains analysis and visualization scripts only.
